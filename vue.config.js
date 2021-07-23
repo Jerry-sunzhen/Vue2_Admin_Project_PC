@@ -32,7 +32,7 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     port: port,
-    open: true,
+    hot: true,
     overlay: {
       warnings: false,
       errors: true
@@ -40,15 +40,17 @@ module.exports = {
     // 配置代理服务器的跨域
     proxy:{
       "/dev-api":{
-        target:"",
+        // 注意:由于用户相关API与商品相关API的接口端口号不同
+        // 这里在设置目标服务器的时候不设置端口,让devServer自己去轮询服务器端口
+        target:"http://39.98.123.211",
         changeOrigin:true,
         pathRewrite:{
           "^/dev-api":""
         }
-      }
+      },
     },
-    // mock的钩子函数配置
-    before: require('./mock/mock-server.js')
+    // mock的钩子函数配置(登录接口不再使用mock,因此进行注释)
+    // before: require('./mock/mock-server.js')
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
@@ -61,6 +63,15 @@ module.exports = {
     // 配置文件路径别名
     config.resolve.alias
       .set('@',resolve('src'))
+      .set('api',resolve('src/api'))
+      .set('assets',resolve('src/assets'))
+      .set('components',resolve('src/components'))
+      .set('icons',resolve('src/icons'))
+      .set('layout',resolve('src/layout'))
+      .set('router',resolve('src/router'))
+      .set('store',resolve('src/store'))
+      .set('styles',resolve('src/styles'))
+      .set('utils',resolve('src/utils'))
       .set('views',resolve('src/views'))
 
     // it can improve the speed of the first screen, it is recommended to turn on preload

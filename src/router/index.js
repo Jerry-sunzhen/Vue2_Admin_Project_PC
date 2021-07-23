@@ -35,13 +35,13 @@ import Layout from '@/layout'
 export const constantRoutes = [
   {
     path: '/login',
-    component: () => import('@/views/login/index'),
+    component: () => import('views/login/index'),
     hidden: true
   },
 
   {
     path: '/404',
-    component: () => import('@/views/404'),
+    component: () => import('views/404'),
     hidden: true
   },
   {
@@ -51,8 +51,8 @@ export const constantRoutes = [
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      component: () => import('views/dashboard/index'),
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
   {
@@ -66,14 +66,6 @@ export const constantRoutes = [
     redirect: '',
     children: [
       {
-        name: 'Category',
-        path: 'category/list',
-        component: () => import('views/product/Category/Category'),
-        meta: {
-          title: '分类管理',
-        },
-      },
-      {
         name: 'Trademark',
         path: 'trademark/list',
         component: () => import('views/product/Trademark/Trademark'),
@@ -81,6 +73,15 @@ export const constantRoutes = [
           title: '品牌管理',
         },
       },
+      {
+        name: 'Category',
+        path: 'category/list',
+        component: () => import('views/product/Category/Category'),
+        meta: {
+          title: '分类管理',
+        },
+      },
+
       {
         name: 'Attr',
         path: 'attr/list',
@@ -112,7 +113,7 @@ export const constantRoutes = [
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })
