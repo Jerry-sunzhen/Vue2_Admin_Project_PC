@@ -1,6 +1,6 @@
 <template>
   <div>
-
+    Stock Keeping Unit
   </div>
 </template>
 

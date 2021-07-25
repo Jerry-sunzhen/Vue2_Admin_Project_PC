@@ -71,6 +71,7 @@ export const constantRoutes = [
         component: () => import('views/product/Trademark/Trademark'),
         meta: {
           title: '品牌管理',
+          icon: "el-icon-price-tag"
         },
       },
       {
@@ -79,6 +80,7 @@ export const constantRoutes = [
         component: () => import('views/product/Category/Category'),
         meta: {
           title: '分类管理',
+          icon: "el-icon-s-operation"
         },
       },
 
@@ -88,6 +90,7 @@ export const constantRoutes = [
         component: () => import('views/product/Attr/Attr'),
         meta: {
           title: '平台属性管理',
+          icon: "el-icon-info"
         },
       },
       {
@@ -96,6 +99,7 @@ export const constantRoutes = [
         component: () => import('views/product/Spu/Spu'),
         meta: {
           title: 'SPU管理',
+          icon: "el-icon-s-grid"
         },
       },
       {
@@ -104,21 +108,22 @@ export const constantRoutes = [
         component: () => import('views/product/Sku/Sku'),
         meta: {
           title: 'SKU管理',
+          icon: "el-icon-menu"
         },
       }
     ]
   },
-  // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({
   mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({ y: 0,behavior:"smooth" }),
   routes: constantRoutes
 })
 
 const router = createRouter()
+
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
