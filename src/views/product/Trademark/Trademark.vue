@@ -9,7 +9,7 @@
       ref="singleTable" :data="tableData"
       highlight-current-row @current-change="handleCurrentRowChange"
       style="width: 95%; margin:10px" border>
-      <el-table-column align="center" type="index" label="序号" min-width="100"></el-table-column>
+      <el-table-column align="center" type="index" label="序号" width="100px"></el-table-column>
       <el-table-column align="center" property="tmName" label="品牌名称" min-width="270"></el-table-column>
       <el-table-column align="center" label="品牌Logo" min-width="270">
         <!--通过作用域插槽可以拿到该table-column中每个row的信息-->
@@ -42,12 +42,11 @@
       :title="this.isDialogEdit?'编辑':'添加'+'品牌'"
       :visible.sync="dialogVisible"
       width="60%">
-      <el-form ref="trademarkForm" :model="form"
-               label-width="80px" :rules="rules">
-        <el-form-item label="品牌名称" label-width="100px" prop="name">
+      <el-form ref="trademarkForm" :model="form" :rules="rules">
+        <el-form-item label="品牌名称"  prop="name">
           <el-input v-model="form.name" style="width: 200px"></el-input>
         </el-form-item>
-        <el-form-item label-width="100px" label="品牌Logo" prop="logoUrl" ref="upload">
+        <el-form-item label="品牌Logo" prop="logoUrl" ref="upload">
           <el-upload
             class="avatar-uploader"
             :action="upLoadUrl"
@@ -56,7 +55,7 @@
             :before-upload="beforeAvatarUpload">
             <img v-if="form.logoUrl" :src="form.logoUrl" class="avatar" alt="">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过300kb</div>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过300KB</div>
           </el-upload>
         </el-form-item>
       </el-form>
@@ -216,19 +215,23 @@ export default {
     async removeTrademark(row){
       // 注意: 删除之前一定要进行弹窗确认!!!
       try {
-        await this.$confirm('此操作将永久删除该品牌, 是否继续?', '删除品牌')
+        await this.$confirm('此操作将永久删除该品牌, 是否继续?', '删除品牌',{
+          cancelButtonText:"取消",
+          confirmButtonText:"确认"
+        })
+
+        const {code} = await this.$api.products.trademark.removeBaseTrademark(row.id)
+        if(code === 200){
+          this.$message.success("删除成功")
+        }
+        // 删除成功之后需要判断当前页与总页数的关系,对当前页进行修正
+        // 如果当前页的tableData只有一条数据,并且total的值不是1,那么让当前页码-1(避免删除刷新之后当前页为空白)
+        if(this.tableData.length ===1 && this.total !== 1){
+          this.currentPage -= 1
+        }
+        // 重新请求接口获取最新的trademark信息
+        await this.getTrademark()
       }catch (e) {}
-      const {code} = await this.$api.products.trademark.removeBaseTrademark(row.id)
-      if(code === 200){
-        this.$message.success("删除成功")
-      }
-      // 删除成功之后需要判断当前页与总页数的关系,对当前页进行修正
-      // 如果当前页的tableData只有一条数据,并且total的值不是1,那么让当前页码-1(避免删除刷新之后当前页为空白)
-      if(this.tableData.length ===1 && this.total !== 1){
-        this.currentPage -= 1
-      }
-      // 重新请求接口获取最新的trademark信息
-      await this.getTrademark()
     }
   },
   computed:{

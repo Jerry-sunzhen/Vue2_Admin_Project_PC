@@ -16,6 +16,9 @@ import router from './router'
 import api from "api"
 Vue.prototype.$api = api
 
+// 初始化事件总线
+Vue.prototype.$bus = new Vue()
+
 
 import '@/icons' // icon
 import '@/permission' // permission control
