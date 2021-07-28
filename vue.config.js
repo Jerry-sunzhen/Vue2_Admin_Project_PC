@@ -6,6 +6,8 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
+const LodashModuleReplacementPlugin = require("lodash-webpack-plugin")
+
 const name = defaultSettings.title || 'vue Admin Template' // page title
 
 
@@ -59,7 +61,10 @@ module.exports = {
           use:["less-loader"]
         }
       ]
-    }
+    },
+    plugins:[
+      new LodashModuleReplacementPlugin()
+    ]
 
   },
   chainWebpack(config) {

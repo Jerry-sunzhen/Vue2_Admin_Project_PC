@@ -19,6 +19,8 @@ Vue.prototype.$api = api
 // 初始化事件总线
 Vue.prototype.$bus = new Vue()
 
+// 引入全局注册相关文件
+import "components"
 
 import '@/icons' // icon
 import '@/permission' // permission control

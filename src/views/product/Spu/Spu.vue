@@ -1,11 +1,20 @@
 <template>
   <div>
-    Standard Product Unit
-    <el-input v-model="input" placeholder="请输入内容" @change="changeFn"></el-input>
+    <el-card style="margin: 10px">
+      <category-selector />
+    </el-card>
+    <el-card style="margin: 10px">
+      <spu-board />
+    </el-card>
+    <el-card style="margin: 10px">
+      <spu-edit />
+    </el-card>
   </div>
 </template>
 
 <script>
+import SpuEdit from "views/product/Spu/SpuEdit"
+import SpuBoard from "views/product/Spu/SpuBoard"
 export default {
   name: "Spu",
   data(){
@@ -14,9 +23,11 @@ export default {
     }
   },
   methods:{
-    changeFn(){
-      console.log("!!!")
-    }
+
+  },
+  components:{
+    SpuEdit,
+    SpuBoard
   }
 }
 </script>

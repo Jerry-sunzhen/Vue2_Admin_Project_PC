@@ -43,7 +43,6 @@
       <el-button
         type="primary" icon="el-icon-plus"
         :disabled="isAllowedToAddAttrValue" @click="addAttrValue">添加属性值</el-button>
-      <el-button @click="cancelAttrEdit">取消</el-button>
       <el-table style="margin: 20px 0"
         ref="attrValueList" :data="form.attrValueList" highlight-current-row border>
         <el-table-column align="center" type="index" label="序号" width="100px"></el-table-column>
@@ -70,7 +69,7 @@
 </template>
 
 <script>
-import TipButton from "components/TipButton/TipButton";
+import _ from "lodash"
 export default {
   name: "AttrBoard",
   created() {
@@ -99,18 +98,14 @@ export default {
       }
     })
   },
-  mounted() {
-    // 后续需要移除
-    this.getAttrList()
-  },
   data(){
     return {
       isEditMode:false,
       // 存放selectChange事件传送过来的category参数
       categoryInfo:{
-        category1Id:2,
-        category2Id:13,
-        category3Id:61
+        category1Id:"",
+        category2Id:"",
+        category3Id:""
       },
       attrList: [], // 三级分类对应的属性列表
       confirmTitle:"确定删除该属性吗?",   // popConfirm弹框显示数据
@@ -135,13 +130,19 @@ export default {
     // 1. attrValueList数组为空 2. 数组中属性名存在重复 3. 数组中属性名存在空值
     isAllowedToSave(){
       return !this.form.attrValueList.length || this.isItemValueNameDuplicate || !this.isItemValueNameExist
+    },
+
+    // 由于watch监听的是一个对象,因此如果需要获取对象修改的新值与旧值,可以利用计算属性进行监听
+    getOldAttrValueList(){
+      // 使用lodash进行深拷贝
+      return _.cloneDeep(this.form.attrValueList)
     }
   },
   watch:{
     // 监听isEditMode属性的变化,一旦切换为编辑模式
     isEditMode(newVal){
       // 1. 向selector发射一个事件,让selector修改三个select选择框的可用状态
-      this.$bus.$emit("editModeChange",newVal)
+      this.$emit("editModeChange",newVal)
 
       // 当editMode被关闭
       if(newVal === false){
@@ -154,9 +155,8 @@ export default {
       }
     },
 
-    "form.attrValueList":{
+    getOldAttrValueList:{
       handler(newList,oldList){
-        // console.log(JSON.stringify(newList),JSON.stringify(oldList))
         this.isItemValueNameExist = newList.every(item=>!!item.valueName)
         if(!this.isItemValueNameExist && (newList.length === oldList.length)){
           this.$message.warning("属性值不能为空")
@@ -248,9 +248,6 @@ export default {
       const setArr = new Set(valueNameList)
       return setArr.size !== valueNameList.length  // 如果长度不等就说明存在重复的值
     }
-  },
-  components:{
-    TipButton
   }
 }
 </script>

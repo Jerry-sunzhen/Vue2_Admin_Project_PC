@@ -32,7 +32,14 @@
 
 <script>
 export default {
-  name: "AttrCategorySelector",
+  name: "CategorySelector",
+  props:{
+    // board是否为编辑状态,初始化为false,则三级分类的selector都处于可用状态
+    isEdit:{
+      type:Boolean,
+      default:false
+    }
+  },
   data(){
     return {
       form:{},
@@ -42,8 +49,7 @@ export default {
       category2Id:"",
       category3List:[],
       category3Id:"",
-      // board是否为编辑状态,初始化为false,则三级分类的selector都处于可用状态
-      isEdit:false
+
     }
   },
 
@@ -53,11 +59,6 @@ export default {
     if(code === 200){
       this.category1List = data
     }
-
-    // 在总线上注册board中编辑状态修改相关的自定义事件
-    this.$bus.$on("editModeChange",(isEdit)=>{
-      this.isEdit = isEdit
-    })
   },
   methods:{
     // 只要三级分类中的任意一级内容发生了改变,就需要使用事件总线向外发射数据
